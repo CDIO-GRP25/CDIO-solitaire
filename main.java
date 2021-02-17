@@ -1,5 +1,8 @@
 class main {
     public static void main(String[] args) {
-        System.out.println("Hello world");
+        Gamestate game = new Gamestate();
+        game.setupGameState();
+        game.print();
+
     }
 }

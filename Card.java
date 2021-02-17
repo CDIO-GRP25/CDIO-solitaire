@@ -38,4 +38,8 @@ public class Card {
         return colour;
     }
 
+    @Override
+    public String toString() {
+        return rank + "-" + suit;
+    }
 }

@@ -18,4 +18,8 @@ abstract class GamePile {
     int getRemainingCards() {
         return cardPile.size();
     };
+
+    void setupCard(Card card){
+        cardPile.addFirst(card);
+    }
 }

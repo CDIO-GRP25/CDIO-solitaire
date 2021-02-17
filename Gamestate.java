@@ -25,15 +25,13 @@ public class Gamestate {
             suitPiles.add(x);
         }
         dealCards();
-        
-
     }
 
 
     public void dealCards() {
         for (GamePile gamePile : buildPiles) {
             for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
-                gamePile.addCard(deck.drawCard());
+                gamePile.setupCard(deck.drawCard());
             }
         }
     }
@@ -44,5 +42,21 @@ public class Gamestate {
         //Add card to top of pilr
         to.addCard(card);
 
+    }
+
+    public void print(){
+        String remainingInPile ="| ";
+        String buildPileString = "| ";
+        for (GamePile buildPile : buildPiles){
+            remainingInPile += buildPile.getRemainingCards() + " | ";
+            buildPileString +=  buildPile.getTopCard().toString() + " | ";
+        }
+        System.out.println(remainingInPile + "\n" + buildPileString + "\n");
+
+        String suitPileString = "| ";
+        for (GamePile suitPile : suitPiles){
+            suitPileString += suitPile.getTopCard().toString() + " | ";
+        }
+        System.out.println("suitPiles: " + suitPileString);
     }
 }
