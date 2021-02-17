@@ -16,7 +16,7 @@ public class Gamestate {
 
     public void setupGameState() {
         this.deck = new Deck();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             GamePile y = new Pile();
             buildPiles.add(y);
         }
@@ -55,7 +55,12 @@ public class Gamestate {
 
         String suitPileString = "| ";
         for (GamePile suitPile : suitPiles){
-            suitPileString += suitPile.getTopCard().toString() + " | ";
+            if(suitPile.getTopCard() != null) {
+                suitPileString += suitPile.getTopCard().toString() + " | ";
+            }
+            else{
+                suitPileString += "empty | ";
+            }
         }
         System.out.println("suitPiles: " + suitPileString);
     }
