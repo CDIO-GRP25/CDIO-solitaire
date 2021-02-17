@@ -30,6 +30,10 @@ public class Card {
         this.revealed = true;
     }
 
+    public Boolean getRevealed() {
+        return revealed;
+    }
+
     public int getRank() {
         return rank;
     }

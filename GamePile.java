@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -6,20 +7,27 @@ import java.util.LinkedList;
  */
 abstract class GamePile {
 
-    Deque<Card> cardPile = new LinkedList<Card>();
+    ArrayList<Card> cardPile = new ArrayList<>();
     Card removeTopCard() {
-        return cardPile.removeFirst();
+        return cardPile.remove(cardPile.size() - 1);
     };
     abstract void addCard(Card card);
     
     Card getTopCard() {
-        return cardPile.peek();
+        return cardPile.get(cardPile.size() - 1);
     };
+    Card getCardByIndex(int x){
+        if(x < cardPile.size()) {
+            return cardPile.get(x);
+        }
+        else return null;
+    }
+
     int getRemainingCards() {
         return cardPile.size();
     };
 
     void setupCard(Card card){
-        cardPile.addFirst(card);
+        cardPile.add(card);
     }
 }
