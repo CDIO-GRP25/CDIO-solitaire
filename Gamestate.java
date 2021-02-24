@@ -37,12 +37,25 @@ public class Gamestate {
         }
     }
 
-    public void moveCardToPile(GamePile from, GamePile to) {
-        // Remove top card of the pile
-        Card card = from.removeTopCard();
-        //Add card to top of pilr
-        to.addCard(card);
+    public void moveCardToPile(int[] input) {
+        GamePile pileFrom = buildPiles.get(input[0]);
+        GamePile pileTo = buildPiles.get(input[1]);
 
+        ArrayList<Card> cardsToMove = pileFrom.getRevealed();
+        //check if move is possible
+        if(!pileTo.getTopCard().getColour().equals(cardsToMove.get(0).getColour())
+                && (pileTo.getTopCard().getRank() == (cardsToMove.get(0).getRank() + 1) )){
+            //move the cards
+            pileFrom.removeCards(cardsToMove);
+            pileTo.addCards(cardsToMove);
+            //reveal card underneath moved pile
+            if(pileFrom.getRemainingCards() != 0){
+                pileFrom.getTopCard().reveal();
+            }
+        }
+        else{
+            System.out.println("Hov hov, ulovligt træk!");
+        }
     }
 
     public void print(){
