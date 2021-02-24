@@ -27,7 +27,7 @@ public class Gamestate {
         dealCards();
     }
 
-/*
+
     public void dealCards() {
         for (GamePile gamePile : buildPiles) {
             for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
@@ -35,10 +35,10 @@ public class Gamestate {
             }
             gamePile.getTopCard().reveal();
         }
-    } */
+    }
 
     // only for test
-    public void dealCards() {
+  /*  public void dealCards() {
         for (GamePile gamePile : buildPiles) {
             for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
                 if (buildPiles.indexOf(gamePile) == i && i == 0) {
@@ -57,7 +57,7 @@ public class Gamestate {
                 gamePile.getTopCard().reveal();
             }
         }
-    }
+    }*/
 
     public void moveCardToPile(int[] input) {
         GamePile pileFrom = buildPiles.get(input[0]);
