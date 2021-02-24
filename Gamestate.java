@@ -27,13 +27,35 @@ public class Gamestate {
         dealCards();
     }
 
-
+/*
     public void dealCards() {
         for (GamePile gamePile : buildPiles) {
             for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
                 gamePile.setupCard(deck.drawCard());
             }
             gamePile.getTopCard().reveal();
+        }
+    } */
+
+    // only for test
+    public void dealCards() {
+        for (GamePile gamePile : buildPiles) {
+            for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
+                if (buildPiles.indexOf(gamePile) == i && i == 0) {
+                    // ignore    
+                }
+                else if (buildPiles.indexOf(gamePile) == i && i == 1) {
+                    Card card = new Card(Suits.CLUBS, 12);
+                    gamePile.setupCard(card);
+                }
+                else {
+                    gamePile.setupCard(deck.drawCard());
+                }
+                
+            }
+            if (gamePile.cardPile.size() != 0) {
+                gamePile.getTopCard().reveal();
+            }
         }
     }
 
