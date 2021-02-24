@@ -30,4 +30,26 @@ abstract class GamePile {
     void setupCard(Card card){
         cardPile.add(card);
     }
+
+    public ArrayList<Card> getRevealed(){
+        ArrayList<Card> revealedCards = new ArrayList<>();
+        for(Card card : cardPile){
+            if(card.getRevealed() == true){
+                revealedCards.add(card);
+            }
+        }
+    return revealedCards;
+    }
+
+    public void removeCards(ArrayList<Card> cards){
+        for(Card card : cards){
+            cardPile.remove(card);
+        }
+    }
+
+    public void addCards(ArrayList<Card> cards){
+        for(Card card : cards){
+            cardPile.add(card);
+        }
+    }
 }
