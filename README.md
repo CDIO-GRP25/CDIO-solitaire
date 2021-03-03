@@ -13,4 +13,6 @@ Regler der skal implementeres:
 
 Der er kun en konge der skal kunne rykkes til en tom bunke.
 
+Der skal vises nye kort når der bliver rykket
+
 Der skal tjekkes hvorvidt om kort rent faktisk er tilladt at ligge ovenpå hinanden.
