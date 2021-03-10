@@ -38,7 +38,7 @@ public class Gamestate {
     }
 
     // only for test
-  /*  public void dealCards() {
+    /*public void dealCards() {
         for (GamePile gamePile : buildPiles) {
             for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
                 if (buildPiles.indexOf(gamePile) == i && i == 0) {
@@ -57,7 +57,7 @@ public class Gamestate {
                 gamePile.getTopCard().reveal();
             }
         }
-    }*/
+    } */
 
     public void moveCardToPile(int[] input) {
         GamePile pileFrom = buildPiles.get(input[0]);
@@ -65,7 +65,9 @@ public class Gamestate {
 
         ArrayList<Card> cardsToMove = pileFrom.getRevealed();
         //check if move is possible
-        if(!pileTo.getTopCard().getColour().equals(cardsToMove.get(0).getColour())
+
+        if( ( pileTo.getTopCard() == null && (cardsToMove.get(0).getRank() == 12) ) || 
+                pileTo.getTopCard() != null && !pileTo.getTopCard().getColour().equals(cardsToMove.get(0).getColour())
                 && (pileTo.getTopCard().getRank() == (cardsToMove.get(0).getRank() + 1) )){
             //move the cards
             pileFrom.removeCards(cardsToMove);
