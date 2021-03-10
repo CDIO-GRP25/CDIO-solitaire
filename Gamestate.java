@@ -37,8 +37,8 @@ public class Gamestate {
         }
     }
 
-    // only for test
-  /*  public void dealCards() {
+    // only for test with kings
+    /*public void dealCards() {
         for (GamePile gamePile : buildPiles) {
             for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
                 if (buildPiles.indexOf(gamePile) == i && i == 0) {
@@ -69,7 +69,8 @@ public class Gamestate {
         ******* check has been made into a method itself*******
         if(!pileTo.getTopCard().getColour().equals(cardsToMove.get(0).getColour())
                 && (pileTo.getTopCard().getRank() == (cardsToMove.get(0).getRank() + 1) )){*/
-        if(isMoveLegal(cardsToMove.get(0),pileTo.getTopCard())){
+        if(( pileTo.getTopCard() == null && (cardsToMove.get(0).getRank() == 12) ) ||
+                pileTo.getTopCard() != null && isMoveLegal(cardsToMove.get(0),pileTo.getTopCard())){
             //move the cards
             pileFrom.removeCards(cardsToMove);
             pileTo.addCards(cardsToMove);

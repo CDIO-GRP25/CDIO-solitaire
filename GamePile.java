@@ -14,13 +14,14 @@ abstract class GamePile {
     abstract void addCard(Card card);
     
     Card getTopCard() {
-        if(cardPile.size() == 0){
-            return null;
-        }
-        else {
+        
+        if (cardPile.size() != 0) {
             return cardPile.get(cardPile.size() - 1);
         }
+
+        return null;
     };
+
     Card getCardByIndex(int x){
         if(x < cardPile.size()) {
             return cardPile.get(x);
