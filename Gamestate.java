@@ -81,7 +81,7 @@ public class Gamestate {
     }
 
     public void print(){
-        System.out.printf("pilenr: %n|%10d|%10d|%10d|%10d|%10d|%10d|%10d| \n",1,2,3,4,5,6,7);
+        System.out.printf("|%11s|%11d|%11d|%11d|%11d|%11d|%11d| \n","pilenr: 1",2,3,4,5,6,7);
         boolean printDone = false;
         for (int j = 0; j < 20; j++){
             System.out.print("|");
@@ -92,12 +92,12 @@ public class Gamestate {
                         System.out.printf("%11s|", buildPiles.get(i).getCardByIndex(j).toString());
                     }
                     else{
-                        System.out.printf("%11s", "hidden |");
+                        System.out.printf("%11s|", "hidden");
                     }
                     printDone = false;
                 }
                 else{
-                    System.out.printf("%11s", "- |");
+                    System.out.printf("%11s|", " -  ");
                 }
 
             }
@@ -117,5 +117,7 @@ public class Gamestate {
             }
         }
         System.out.println("suitPiles: " + suitPileString);
+
+        System.out.println("Draw pile: " + "insert drawpile stuff here");
     }
 }
