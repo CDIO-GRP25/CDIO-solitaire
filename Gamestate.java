@@ -37,7 +37,7 @@ public class Gamestate {
         }
     }
 
-    // only for test
+    // only for test with kings
     /*public void dealCards() {
         for (GamePile gamePile : buildPiles) {
             for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
