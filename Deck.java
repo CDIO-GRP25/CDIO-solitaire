@@ -8,11 +8,12 @@ import java.util.List;
 public class Deck {
 
     public Deck () {
+        drawPileCounter = 0;
         generateDeck();
     }
 
     private List<Card> cards = new ArrayList<Card>();
-
+    private int drawPileCounter;
 
     public void generateDeck() {
         for (Suits s : Suits.values()) {
@@ -29,17 +30,40 @@ public class Deck {
     }
 
 
-    public Card showTopCard () {
-        return cards.iterator().next();
+    public Card getTopCard () {
+        //used for turning cards over in drawpile
+        Card flippedCard = cards.get(drawPileCounter);
+        //drawPileCounter++;
+        return flippedCard;
+
+        //return cards.iterator().next();
     }
 
     public Card drawCard() {
-        Card draw = cards.get(0);
+        //drawPileCounter is 0 at initiation so
+        Card draw = cards.get(drawPileCounter);
         cards.remove(draw);
         return draw;
     }
 
     public void skipCard() {
         //TODO
+        drawPileCounter++;
+        if(drawPileCounter > cards.size()-1){
+            //if deck has been iterated through
+            drawPileCounter = 0;
+        }
+    }
+
+    public int getDrawPileSize(){
+        return cards.size()-drawPileCounter;
+    }
+
+    public int getDeckSize(){
+        return cards.size();
+    }
+
+    public int getDrawPileCounter(){
+        return drawPileCounter;
     }
 }

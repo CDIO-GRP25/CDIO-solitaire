@@ -6,9 +6,9 @@ import java.util.List;
  */
 public class Gamestate {
 
-    List<GamePile> buildPiles = new ArrayList<GamePile>();
-    List<GamePile> suitPiles = new ArrayList<GamePile>();
-    Deck deck;
+    private List<GamePile> buildPiles = new ArrayList<GamePile>();
+    private List<GamePile> suitPiles = new ArrayList<GamePile>();
+    private Deck deck;
 
     public Gamestate() {
         setupGameState();
@@ -65,8 +65,11 @@ public class Gamestate {
 
         ArrayList<Card> cardsToMove = pileFrom.getRevealed();
         //check if move is possible
+        /*
+        ******* check has been made into a method itself*******
         if(!pileTo.getTopCard().getColour().equals(cardsToMove.get(0).getColour())
-                && (pileTo.getTopCard().getRank() == (cardsToMove.get(0).getRank() + 1) )){
+                && (pileTo.getTopCard().getRank() == (cardsToMove.get(0).getRank() + 1) )){*/
+        if(isMoveLegal(cardsToMove.get(0),pileTo.getTopCard())){
             //move the cards
             pileFrom.removeCards(cardsToMove);
             pileTo.addCards(cardsToMove);
@@ -75,9 +78,36 @@ public class Gamestate {
                 pileFrom.getTopCard().reveal();
             }
         }
+    }
+
+
+    private boolean isMoveLegal(Card from, Card to){
+        if(!to.getColour().equals(from.getColour())
+                && (to.getRank() == (from.getRank() + 1) )){
+            return true;
+        }
         else{
             System.out.println("Hov hov, ulovligt træk!");
+            return false;
         }
+    }
+
+    public void moveDrawPileCard(int inputTo){
+        //move flipped card into the build piles if legal move
+        GamePile pileTo = buildPiles.get(inputTo);
+        //check if legal
+        if(isMoveLegal(deck.getTopCard(), pileTo.getTopCard())){
+            //move card
+            ArrayList<Card> cardToMove = new ArrayList<>();
+            cardToMove.add(deck.drawCard());
+            cardToMove.get(0).reveal();
+            pileTo.addCards(cardToMove);
+
+        }
+    }
+
+    public void drawNextCard(){
+        deck.skipCard();
     }
 
     public void print(){
@@ -118,6 +148,9 @@ public class Gamestate {
         }
         System.out.println("suitPiles: " + suitPileString);
 
-        System.out.println("Draw pile: " + "insert drawpile stuff here");
+        System.out.println("Draw pile: " + deck.getDrawPileSize() + " left (total: " + deck.getDeckSize() + ")");
+        System.out.println("Flipped Card: [" + deck.getTopCard() + "] (index: " + deck.getDrawPileCounter() + ")");
+        System.out.println("commands: draw=[d], movePile=[mx,y] (x,y is pile index to,from), insertDrawnCard[dmx] (x is pile index to)");
+        System.out.print("insert command: ");
     }
 }
