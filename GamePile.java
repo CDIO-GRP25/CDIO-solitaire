@@ -15,12 +15,13 @@ abstract class GamePile {
     
     Card getTopCard() {
         
-        if (cardPile.size() != 0)
+        if (cardPile.size() != 0) {
             return cardPile.get(cardPile.size() - 1);
+        }
 
         return null;
     };
-    
+
     Card getCardByIndex(int x){
         if(x < cardPile.size()) {
             return cardPile.get(x);

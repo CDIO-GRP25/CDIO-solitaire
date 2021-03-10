@@ -83,23 +83,23 @@ public class Gamestate {
     }
 
     public void print(){
-        System.out.println("pilenr: | 1 | 2 | 3 | 4 | 5 | 6 | 7 |");
+        System.out.printf("pilenr: %n|%10d|%10d|%10d|%10d|%10d|%10d|%10d| \n",1,2,3,4,5,6,7);
         boolean printDone = false;
         for (int j = 0; j < 20; j++){
+            System.out.print("|");
             for (int i = 0 ; i < 7; i++){
                 printDone = true;
                 if(buildPiles.get(i) != null && buildPiles.get(i).getCardByIndex(j) != null){
                     if(buildPiles.get(i).getCardByIndex(j).getRevealed()){
-                        System.out.print(buildPiles.get(i).getCardByIndex(j).toString() + " | ");
-
+                        System.out.printf("%11s|", buildPiles.get(i).getCardByIndex(j).toString());
                     }
                     else{
-                        System.out.print("hidden | ");
+                        System.out.printf("%11s", "hidden |");
                     }
                     printDone = false;
                 }
                 else{
-                    System.out.print("- | ");
+                    System.out.printf("%11s", "- |");
                 }
 
             }
@@ -109,16 +109,7 @@ public class Gamestate {
             }
         }
 
-
-        /* String remainingInPile ="| ";
-        String buildPileString = "| ";
-        for (GamePile buildPile : buildPiles){
-            remainingInPile += buildPile.getRemainingCards()-1 + " | ";
-            buildPileString +=  buildPile.getTopCard().toString() + " | ";
-        }
-        System.out.println(remainingInPile + "\n" + buildPileString + "\n");
-*/
-        /*String suitPileString = "| ";
+        String suitPileString = "| ";
         for (GamePile suitPile : suitPiles){
             if(suitPile.getTopCard() != null) {
                 suitPileString += suitPile.getTopCard().toString() + " | ";
@@ -127,6 +118,6 @@ public class Gamestate {
                 suitPileString += "empty," + ((SuitPile)suitPile).getSuit() + " | ";
             }
         }
-        System.out.println("suitPiles: " + suitPileString);*/
+        System.out.println("suitPiles: " + suitPileString);
     }
 }
