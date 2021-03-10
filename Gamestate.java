@@ -28,17 +28,17 @@ public class Gamestate {
     }
 
 
-    public void dealCards() {
+    /*public void dealCards() {
         for (GamePile gamePile : buildPiles) {
             for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
                 gamePile.setupCard(deck.drawCard());
             }
             gamePile.getTopCard().reveal();
         }
-    }
+    }*/
 
     // only for test with kings
-    /*public void dealCards() {
+    public void dealCards() {
         for (GamePile gamePile : buildPiles) {
             for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
                 if (buildPiles.indexOf(gamePile) == i && i == 0) {
@@ -57,7 +57,7 @@ public class Gamestate {
                 gamePile.getTopCard().reveal();
             }
         }
-    }*/
+    }
 
     public void moveCardToPile(int[] input) {
         GamePile pileFrom = buildPiles.get(input[0]);
@@ -69,8 +69,10 @@ public class Gamestate {
         ******* check has been made into a method itself*******
         if(!pileTo.getTopCard().getColour().equals(cardsToMove.get(0).getColour())
                 && (pileTo.getTopCard().getRank() == (cardsToMove.get(0).getRank() + 1) )){*/
-        if(( pileTo.getTopCard() == null && (cardsToMove.get(0).getRank() == 12) ) ||
-                pileTo.getTopCard() != null && isMoveLegal(cardsToMove.get(0),pileTo.getTopCard())){
+        if( !cardsToMove.isEmpty() &&
+                //( pileTo.getTopCard() == null && (cardsToMove.get(0).getRank() == 12) ) ||
+                //pileTo.getTopCard() != null &&
+                        isMoveLegal(cardsToMove.get(0),pileTo.getTopCard())){
             //move the cards
             pileFrom.removeCards(cardsToMove);
             pileTo.addCards(cardsToMove);
@@ -83,8 +85,8 @@ public class Gamestate {
 
 
     private boolean isMoveLegal(Card from, Card to){
-        if(!to.getColour().equals(from.getColour())
-                && (to.getRank() == (from.getRank() + 1) )){
+        if( ( (to == null) && (from.getRank()==12) ) ||
+                (to!=null  && !to.getColour().equals(from.getColour()) && (to.getRank() == (from.getRank()+1)) ) ){
             return true;
         }
         else{

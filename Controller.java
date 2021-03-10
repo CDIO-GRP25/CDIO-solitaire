@@ -17,11 +17,11 @@ public class Controller {
             if(input.charAt(0) == 'd' && input.length() == 1) {
                 gamestate.drawNextCard();
             }
-            else if(input.length() == 3 && input.charAt(1) == 'm'){
+            else if(input.length() == 3 && input.substring(0,2).equals("dm") ){
                 //move flipped card from draw pile to build pile
                 gamestate.moveDrawPileCard(Integer.parseInt(input.substring(2)) - 1);
             }
-            else if(input.charAt(0) == 'm'){
+            else if(input.charAt(0) == 'm' && input.length()==4 && input.charAt(2) == ','){
                 int[] move = extractMoveInput(input);
                 gamestate.moveCardToPile(move);
             }
