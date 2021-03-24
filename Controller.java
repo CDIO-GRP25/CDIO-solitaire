@@ -25,6 +25,9 @@ public class Controller {
                 int[] move = extractMoveInput(input);
                 gamestate.moveCardToPile(move);
             }
+            else if(input.length() == 2 && input.substring(0,1).equals("s")){
+                gamestate.addCardToSuitPile(Integer.parseInt(input.substring(1)) - 1);
+            }
             else {
                 System.out.println("input ikke gyldigt");
             }

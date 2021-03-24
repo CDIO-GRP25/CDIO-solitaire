@@ -28,17 +28,17 @@ public class Gamestate {
     }
 
 
-    /*public void dealCards() {
+    public void dealCards() {
         for (GamePile gamePile : buildPiles) {
             for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
                 gamePile.setupCard(deck.drawCard());
             }
             gamePile.getTopCard().reveal();
         }
-    }*/
+    }
 
     // only for test with kings
-    public void dealCards() {
+    /*public void dealCards() {
         for (GamePile gamePile : buildPiles) {
             for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
                 if (buildPiles.indexOf(gamePile) == i && i == 0) {
@@ -57,7 +57,7 @@ public class Gamestate {
                 gamePile.getTopCard().reveal();
             }
         }
-    }
+    }*/
 
     public void moveCardToPile(int[] input) {
         GamePile pileFrom = buildPiles.get(input[0]);
@@ -82,7 +82,6 @@ public class Gamestate {
             }
         }
     }
-
 
     private boolean isMoveLegal(Card from, Card to){
         if( ( (to == null) && (from.getRank()==12) ) ||
@@ -111,6 +110,41 @@ public class Gamestate {
 
     public void drawNextCard(){
         deck.skipCard();
+    }
+
+    public void addCardToSuitPile(int from){
+        GamePile pileFrom;
+        if( from >= 0 && from < buildPiles.size()) {
+            pileFrom = buildPiles.get(from);
+            if (pileFrom.getTopCard() != null) {
+                Card cardToMove = pileFrom.getTopCard();
+                boolean moveLegal;
+                for (GamePile suitPile : suitPiles) {
+                    moveLegal = false;
+                    if (cardToMove.getSuit() == ((SuitPile)suitPile).getSuit()){
+                        if(suitPile.getTopCard() == null && cardToMove.getRank() == 0){
+                            //suitpile empty and card is and ace
+                            moveLegal = true;
+                        }
+                        else if(suitPile.getTopCard() != null && suitPile.getTopCard().getRank() == cardToMove.getRank() -1){
+                            //suitpile not empty and card is +1
+                            moveLegal = true;
+                        }
+                    }
+                    if(moveLegal){
+                        suitPile.addCard(cardToMove);
+                        System.out.println(cardToMove.toString() + "added to suit");
+                        ArrayList<Card> cardRemover = new ArrayList<>();
+                        cardRemover.add(cardToMove);
+                        pileFrom.removeCards(cardRemover);
+                        System.out.println(cardToMove.toString() + " removed from pile");
+                        if(pileFrom.getRemainingCards() != 0){
+                            pileFrom.getTopCard().reveal();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void print(){
@@ -153,7 +187,7 @@ public class Gamestate {
 
         System.out.println("Draw pile: " + deck.getDrawPileSize() + " left (total: " + deck.getDeckSize() + ")");
         System.out.println("Flipped Card: [" + deck.getTopCard() + "] (index: " + deck.getDrawPileCounter() + ")");
-        System.out.println("commands: draw=[d], movePile=[mx,y] (x,y is pile index to,from), insertDrawnCard[dmx] (x is pile index to)");
+        System.out.println("commands: draw=[d], movePile=[mx,y] (x,y is pile index to,from), insertDrawnCard[dmx] (x is pile index to), addToSuitPile=[sx] (x is pile index from)");
         System.out.print("insert command: ");
     }
 }

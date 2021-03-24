@@ -4,7 +4,6 @@
  */
 public class Pile extends GamePile {
 
-    @Override
     void addCard(Card card) {
         if (getRemainingCards() == 0 && card.getRank() == 12) {
             cardPile.add(card);
