@@ -146,6 +146,29 @@ public class Gamestate {
             }
         }
     }
+    public void drawToSuitPile(){
+        Card temp = deck.getTopCard();
+
+        for(GamePile suitPile : suitPiles){
+            boolean moveLegal = false;
+            if (temp.getSuit() == ((SuitPile)suitPile).getSuit()){
+                if(suitPile.getTopCard() == null && temp.getRank() == 0){
+                    //suitpile empty and card is and ace
+                    moveLegal = true;
+                }
+                else if(suitPile.getTopCard() != null && suitPile.getTopCard().getRank() == temp.getRank() - 1){
+                    //suitpile not empty and card is +1
+                    moveLegal = true;
+                }
+            }
+            if(moveLegal){
+                suitPile.addCard(temp);
+                deck.drawCard();
+            }
+
+
+        }
+    }
 
     public void print(){
         System.out.printf("|%11s|%11d|%11d|%11d|%11d|%11d|%11d| \n","pilenr: 1",2,3,4,5,6,7);

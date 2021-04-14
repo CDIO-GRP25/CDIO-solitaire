@@ -17,6 +17,9 @@ public class Controller {
             if(input.charAt(0) == 'd' && input.length() == 1) {
                 gamestate.drawNextCard();
             }
+            else if(input.equals("dms")){
+                gamestate.drawToSuitPile();
+            }
             else if(input.length() == 3 && input.substring(0,2).equals("dm") ){
                 //move flipped card from draw pile to build pile
                 gamestate.moveDrawPileCard(Integer.parseInt(input.substring(2)) - 1);
@@ -43,5 +46,9 @@ public class Controller {
         move[0] = Integer.parseInt(splitInput[0])-1;
         move[1] = Integer.parseInt(splitInput[1])-1;
         return move;
+    }
+
+    private void autoComplete(){
+
     }
 }
