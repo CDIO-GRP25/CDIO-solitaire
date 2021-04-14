@@ -172,12 +172,15 @@ public class Gamestate {
 
     public void print(){
         System.out.printf("|%11s|%11d|%11d|%11d|%11d|%11d|%11d| \n","pilenr: 1",2,3,4,5,6,7);
-        boolean printDone = false;
+
         for (int j = 0; j < 20; j++){
+            //iterate through horizontal lines (max 20 is 7 hidden and 13 shown)
+            boolean printDone = true;
             System.out.print("|");
             for (int i = 0 ; i < 7; i++){
-                printDone = true;
+                //iterate through piles
                 if(buildPiles.get(i) != null && buildPiles.get(i).getCardByIndex(j) != null){
+                    // card exists in this position
                     if(buildPiles.get(i).getCardByIndex(j).getRevealed()){
                         System.out.printf("%11s|", buildPiles.get(i).getCardByIndex(j).toString());
                     }
@@ -187,12 +190,13 @@ public class Gamestate {
                     printDone = false;
                 }
                 else{
+                    // no card in this position
                     System.out.printf("%11s|", " -  ");
                 }
 
             }
             System.out.print("\n");
-            if(printDone){
+            if(printDone){ //if no cards found on line
                 break;
             }
         }
@@ -210,7 +214,7 @@ public class Gamestate {
 
         System.out.println("Draw pile: " + deck.getDrawPileSize() + " left (total: " + deck.getDeckSize() + ")");
         System.out.println("Flipped Card: [" + deck.getTopCard() + "] (index: " + deck.getDrawPileCounter() + ")");
-        System.out.println("commands: draw=[d], movePile=[mx,y] (x,y is pile index to,from), insertDrawnCard[dmx] (x is pile index to), addToSuitPile=[sx] (x is pile index from)");
+        System.out.println("commands: draw=[d], movePile=[mx,y] (x,y is pile index to,from), insertDrawnCard[dmx] (x is pile index to), addToSuitPile=[sx] (x is pile index from), drawCardToSuitPile=[dms]");
         System.out.print("insert command: ");
     }
 }

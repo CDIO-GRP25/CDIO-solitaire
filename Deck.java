@@ -43,6 +43,10 @@ public class Deck {
         //drawPileCounter is 0 at initiation so
         Card draw = cards.get(drawPileCounter);
         cards.remove(draw);
+        if(drawPileCounter > cards.size()-1){
+            //if deck has been iterated through
+            drawPileCounter = 0;
+        }
         return draw;
     }
 
