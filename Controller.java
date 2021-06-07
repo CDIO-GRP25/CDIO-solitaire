@@ -12,9 +12,13 @@ public class Controller {
     public void runGame(){
         while(true){
             gamestate.print();
+            gamestate.detectMoves();
             String input = scanner.nextLine();
+            if(input.isEmpty()){
+                System.out.println("no input...");
+            }
             //checking input action
-            if(input.charAt(0) == 'd' && input.length() == 1) {
+            else if(input.charAt(0) == 'd' && input.length() == 1) {
                 gamestate.drawNextCard();
             }
             else if(input.equals("dms")){
@@ -48,7 +52,13 @@ public class Controller {
         return move;
     }
 
-    private void autoComplete(){
+    private void detectMoves(){
+        if(gamestate == null){
+            System.out.println("gamestate missing");
+            return;
+        }
+
+
 
     }
 }

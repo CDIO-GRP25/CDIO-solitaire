@@ -82,14 +82,15 @@ public class Gamestate {
             }
         }
     }
-
+    private int movecheckcount = 0;
     private boolean isMoveLegal(Card from, Card to){
+        movecheckcount++;
         if( ( (to == null) && (from.getRank()==12) ) ||
                 (to!=null  && !to.getColour().equals(from.getColour()) && (to.getRank() == (from.getRank()+1)) ) ){
             return true;
         }
         else{
-            System.out.println("Hov hov, ulovligt træk!");
+            //System.out.println("Hov hov, ulovligt træk! " + from + " " + to);
             return false;
         }
     }
@@ -101,6 +102,7 @@ public class Gamestate {
         if(isMoveLegal(deck.getTopCard(), pileTo.getTopCard())){
             //move card
             ArrayList<Card> cardToMove = new ArrayList<>();
+            //drawcard removes the card from the deck btw :)
             cardToMove.add(deck.drawCard());
             cardToMove.get(0).reveal();
             pileTo.addCards(cardToMove);
@@ -216,5 +218,101 @@ public class Gamestate {
         System.out.println("Flipped Card: [" + deck.getTopCard() + "] (index: " + deck.getDrawPileCounter() + ")");
         System.out.println("commands: draw=[d], movePile=[mx,y] (x,y is pile index to,from), insertDrawnCard[dmx] (x is pile index to), addToSuitPile=[sx] (x is pile index from), drawCardToSuitPile=[dms]");
         System.out.print("insert command: ");
+    }
+
+    public void detectMoves(){
+        System.out.println("detecting moves");
+        ArrayList<String> possibleCommands = new ArrayList<>();
+        //check all moves moving cards FROM a buildpile
+        for (int i = 0; i < buildPiles.size(); i++) {
+            GamePile buildPileFrom = buildPiles.get(i);
+            ArrayList<Card> cardsToMove = new ArrayList<>();
+            cardsToMove = buildPileFrom.getRevealed();
+
+            //check if cards available:
+            if(!cardsToMove.isEmpty()){
+                //get highest card in the pile
+                Card topCardFrom = cardsToMove.get(0);
+
+                //if topCardFrom is king then look for empty piles:
+                // TODO: if king is already put in empty row dont mention other possible rows (endless back and forth)
+                if(topCardFrom.getRank() == 12){
+                    for(int j = 0; j < buildPiles.size(); j++){
+                        GamePile buildPileTo = buildPiles.get(j);
+                        if(buildPileTo.getRemainingCards() == 0){
+                            possibleCommands.add("KINGMOVE: \tfrom " + (i+1) + " \tto " + (j+1) );
+                        }
+                    }
+                }
+                //if any other card then look for moves to  "x+1"'s and suitpiles
+                else {
+                    //checking basicmoves (buildpile to buildpile with x+1)
+                    for(int j = 0; j < buildPiles.size(); j++){
+                        GamePile buildPileTo = buildPiles.get(j);
+                        Card topCardTo = buildPileTo.getTopCard();
+                        if (isMoveLegal(topCardFrom, topCardTo)) {
+                            possibleCommands.add("BASICMOVE:\tfrom " + (i+1) + " \tto " + (j+1) );
+                        }
+                    }
+
+                    //checking TOSUIT moves (from buildpile to suitpile)
+                    boolean moveLegal;
+                    for(int j = 0; j < suitPiles.size(); j++){
+                        GamePile suitPile = suitPiles.get(j);
+                        moveLegal = false;
+                        if (topCardFrom.getSuit() == ((SuitPile) suitPile).getSuit()) {
+                            if (suitPile.getTopCard() == null && topCardFrom.getRank() == 0) {
+                                //suitpile empty and card is and ace
+                                moveLegal = true;
+                            } else if (suitPile.getTopCard() != null && suitPile.getTopCard().getRank() == topCardFrom.getRank() - 1) {
+                                //suitpile not empty and card is +1
+                                moveLegal = true;
+                            }
+                        }
+                        if(moveLegal){
+                            possibleCommands.add("TOSUITMOVE:\tfrom build " + (i+1) + "\tto suit " + (j+1));
+                        }
+                    }
+
+                    //check if "buildpilefrom" can recieve draw-card
+                    Card deckCard = deck.getTopCard();
+                    Card buildPileCard =  buildPileFrom.getTopCard();
+                    if(isMoveLegal(deckCard, buildPileCard)){
+                        possibleCommands.add("DRAWMOVE:\tdraw \tto build " + (i+1));
+                    }
+                }
+            }
+        }
+
+        //check if draw card can be placed in suitpiles
+        Card deckCard = deck.getTopCard();
+        for(int i = 0; i < suitPiles.size(); i++){
+            GamePile suitPile = suitPiles.get(i);
+            boolean moveLegal = false;
+
+            if (deckCard.getSuit() == ((SuitPile)suitPile).getSuit()){
+                if(suitPile.getTopCard() == null && deckCard.getRank() == 0){
+                    //suitpile empty and card is and ace
+                    moveLegal = true;
+                }
+                else if(suitPile.getTopCard() != null && suitPile.getTopCard().getRank() == deckCard.getRank() - 1){
+                    //suitpile not empty and card is +1
+                    moveLegal = true;
+                }
+            }
+            if(moveLegal){
+                possibleCommands.add("DRAWTOSUIT: \tdraw \tto suit " + (i+1));
+            }
+
+
+        }
+
+
+        for(String command : possibleCommands){
+            System.out.println(command);
+        }
+        if(possibleCommands.isEmpty()){
+            System.out.println("Only move is to draw new card");
+        }
     }
 }
