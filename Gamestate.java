@@ -223,6 +223,7 @@ public class Gamestate {
     public void detectMoves(){
         System.out.println("detecting moves");
         ArrayList<String> possibleCommands = new ArrayList<>();
+        ArrayList<Move> moves = new ArrayList<>();
         //check all moves moving cards FROM a buildpile
         for (int i = 0; i < buildPiles.size(); i++) {
             GamePile buildPileFrom = buildPiles.get(i);
@@ -235,12 +236,13 @@ public class Gamestate {
                 Card topCardFrom = cardsToMove.get(0);
 
                 //if topCardFrom is king then look for empty piles:
-                // TODO: if king is already put in empty row dont mention other possible rows (endless back and forth)
                 if(topCardFrom.getRank() == 12){
                     for(int j = 0; j < buildPiles.size(); j++){
                         GamePile buildPileTo = buildPiles.get(j);
-                        if(buildPileTo.getRemainingCards() == 0){
-                            possibleCommands.add("KINGMOVE: \tfrom " + (i+1) + " \tto " + (j+1) );
+                        if(buildPileTo.getRemainingCards() == 0 && buildPileFrom.getRemainingCards() > cardsToMove.size()){
+                            //card will be revealed upon move
+                            int prio = 2 + buildPileFrom.getRemainingCards() - buildPileFrom.getRevealed().size();
+                            moves.add(new Move(prio, "KINGMOVE: \tfrom " + (i+1) + " \tto " + (j+1)));
                         }
                     }
                 }
@@ -251,26 +253,25 @@ public class Gamestate {
                         GamePile buildPileTo = buildPiles.get(j);
                         Card topCardTo = buildPileTo.getTopCard();
                         if (isMoveLegal(topCardFrom, topCardTo)) {
-                            possibleCommands.add("BASICMOVE:\tfrom " + (i+1) + " \tto " + (j+1) );
+                            //card will be revealed
+                            int prio = 2 + buildPileFrom.getRemainingCards() - buildPileFrom.getRevealed().size();
+                            moves.add(new Move(prio, "BASICMOVE:\tfrom " + (i+1) + " \tto " + (j+1)));
                         }
                     }
 
                     //checking TOSUIT moves (from buildpile to suitpile)
-                    boolean moveLegal;
+                    Card lowCardFrom = buildPileFrom.getTopCard();
                     for(int j = 0; j < suitPiles.size(); j++){
                         GamePile suitPile = suitPiles.get(j);
-                        moveLegal = false;
-                        if (topCardFrom.getSuit() == ((SuitPile) suitPile).getSuit()) {
-                            if (suitPile.getTopCard() == null && topCardFrom.getRank() == 0) {
+                        if (lowCardFrom.getSuit() == ((SuitPile) suitPile).getSuit()) {
+                            if (suitPile.getTopCard() == null && lowCardFrom.getRank() == 0) {
                                 //suitpile empty and card is and ace
-                                moveLegal = true;
-                            } else if (suitPile.getTopCard() != null && suitPile.getTopCard().getRank() == topCardFrom.getRank() - 1) {
+                                moves.add(new Move(25, "TOSUITMOVE:\tfrom build " + (i+1) + "\tto suit " + (j+1)));
+                            } else if (suitPile.getTopCard() != null && suitPile.getTopCard().getRank() == lowCardFrom.getRank() - 1) {
                                 //suitpile not empty and card is +1
-                                moveLegal = true;
+                                int prio =  4 + buildPileFrom.getRemainingCards() - buildPileFrom.getRevealed().size();
+                                moves.add(new Move(prio, "TOSUITMOVE:\tfrom build " + (i+1) + "\tto suit " + (j+1)));
                             }
-                        }
-                        if(moveLegal){
-                            possibleCommands.add("TOSUITMOVE:\tfrom build " + (i+1) + "\tto suit " + (j+1));
                         }
                     }
 
@@ -278,7 +279,7 @@ public class Gamestate {
                     Card deckCard = deck.getTopCard();
                     Card buildPileCard =  buildPileFrom.getTopCard();
                     if(isMoveLegal(deckCard, buildPileCard)){
-                        possibleCommands.add("DRAWMOVE:\tdraw \tto build " + (i+1));
+                        moves.add(new Move(1,"DRAWMOVE:\tdraw \tto build " + (i+1) ));
                     }
                 }
             }
@@ -288,31 +289,34 @@ public class Gamestate {
         Card deckCard = deck.getTopCard();
         for(int i = 0; i < suitPiles.size(); i++){
             GamePile suitPile = suitPiles.get(i);
-            boolean moveLegal = false;
-
             if (deckCard.getSuit() == ((SuitPile)suitPile).getSuit()){
                 if(suitPile.getTopCard() == null && deckCard.getRank() == 0){
                     //suitpile empty and card is and ace
-                    moveLegal = true;
+                    moves.add(new Move(20, "DRAWTOSUIT: \tdraw \tto suit " + (i+1)));
                 }
                 else if(suitPile.getTopCard() != null && suitPile.getTopCard().getRank() == deckCard.getRank() - 1){
                     //suitpile not empty and card is +1
-                    moveLegal = true;
+                    if(deckCard.getRank() == 2){
+                        //deck card is a deuce
+                        moves.add(new Move(20, "DRAWTOSUIT: \tdraw \tto suit " + (i+1)));
+                    }
+                    else{
+                        moves.add(new Move(2, "DRAWTOSUIT: \tdraw \tto suit " + (i+1)));
+                    }
                 }
             }
-            if(moveLegal){
-                possibleCommands.add("DRAWTOSUIT: \tdraw \tto suit " + (i+1));
+        }
+
+        //obligatorisk drawcard move
+        moves.add(new Move(0, "Draw card, no other present moves"));
+
+        Move prioMove = moves.get(0);
+        for(int i = 0; i < moves.size(); i++){
+            if(prioMove.getPriority() < moves.get(i).getPriority()){
+                prioMove = moves.get(i);
             }
-
-
         }
+        System.out.println("prioMove : "+ prioMove.getMovedesc() );
 
-
-        for(String command : possibleCommands){
-            System.out.println(command);
-        }
-        if(possibleCommands.isEmpty()){
-            System.out.println("Only move is to draw new card");
-        }
     }
 }

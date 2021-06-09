@@ -43,9 +43,9 @@ public class Deck {
         //drawPileCounter is 0 at initiation so
         Card draw = cards.get(drawPileCounter);
         cards.remove(draw);
-        //no need to count++ since removal brings index of next card down to current count
-        if(drawPileCounter > cards.size()-1){
-            //if deck has been iterated through
+        //decrement counter to point to last seen card
+        drawPileCounter--;
+        if(drawPileCounter < 0){
             drawPileCounter = 0;
         }
         return draw;
