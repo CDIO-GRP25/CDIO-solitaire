@@ -12,8 +12,9 @@ public class Controller {
     public void runGame(){
         while(true){
             gamestate.print();
-            gamestate.detectMoves();
-            String input = scanner.nextLine();
+            Move bestMove = gamestate.detectMoves();
+            scanner.nextLine();
+            String input = bestMove.getCommand();
             if(input.isEmpty()){
                 System.out.println("no input...");
             }

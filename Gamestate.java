@@ -67,14 +67,7 @@ public class Gamestate {
 
         ArrayList<Card> cardsToMove = pileFrom.getRevealed();
         //check if move is possible
-        /*
-        ******* check has been made into a method itself*******
-        if(!pileTo.getTopCard().getColour().equals(cardsToMove.get(0).getColour())
-                && (pileTo.getTopCard().getRank() == (cardsToMove.get(0).getRank() + 1) )){*/
-        if( !cardsToMove.isEmpty() &&
-                //( pileTo.getTopCard() == null && (cardsToMove.get(0).getRank() == 12) ) ||
-                //pileTo.getTopCard() != null &&
-                        isMoveLegal(cardsToMove.get(0),pileTo.getTopCard())){
+        if( !cardsToMove.isEmpty() && isMoveLegal(cardsToMove.get(0),pileTo.getTopCard())){
             //move the cards
             pileFrom.removeCards(cardsToMove);
             pileTo.addCards(cardsToMove);
@@ -148,6 +141,7 @@ public class Gamestate {
             }
         }
     }
+
     public void drawToSuitPile(){
         Card temp = deck.getTopCard();
 
@@ -220,7 +214,7 @@ public class Gamestate {
         System.out.print("insert command: ");
     }
 
-    public void detectMoves(){
+    public Move detectMoves(){
         System.out.println("detecting moves");
         ArrayList<String> possibleCommands = new ArrayList<>();
         ArrayList<Move> moves = new ArrayList<>();
@@ -242,7 +236,9 @@ public class Gamestate {
                         if(buildPileTo.getRemainingCards() == 0 && buildPileFrom.getRemainingCards() > cardsToMove.size()){
                             //card will be revealed upon move
                             int prio = 2 + buildPileFrom.getRemainingCards() - buildPileFrom.getRevealed().size();
-                            moves.add(new Move(prio, "KINGMOVE: \tfrom " + (i+1) + " \tto " + (j+1)));
+                            moves.add(new Move(prio,
+                                    "KINGMOVE: \tfrom " + (i+1) + " \tto " + (j+1),
+                                    "m"+(i+1)+","+(j+1)));
                         }
                     }
                 }
@@ -255,7 +251,9 @@ public class Gamestate {
                         if (isMoveLegal(topCardFrom, topCardTo)) {
                             //card will be revealed
                             int prio = 2 + buildPileFrom.getRemainingCards() - buildPileFrom.getRevealed().size();
-                            moves.add(new Move(prio, "BASICMOVE:\tfrom " + (i+1) + " \tto " + (j+1)));
+                            moves.add(new Move(prio,
+                                    "BASICMOVE:\tfrom " + (i+1) + " \tto " + (j+1),
+                                    "m"+(i+1)+","+(j+1)));
                         }
                     }
 
@@ -266,21 +264,34 @@ public class Gamestate {
                         if (lowCardFrom.getSuit() == ((SuitPile) suitPile).getSuit()) {
                             if (suitPile.getTopCard() == null && lowCardFrom.getRank() == 0) {
                                 //suitpile empty and card is and ace
-                                moves.add(new Move(25, "TOSUITMOVE:\tfrom build " + (i+1) + "\tto suit " + (j+1)));
+                                moves.add(new Move(25,
+                                        "TOSUITMOVE:\tfrom build " + (i+1) + "\tto suit " + (j+1),
+                                        "s"+(i+1)));
                             } else if (suitPile.getTopCard() != null && suitPile.getTopCard().getRank() == lowCardFrom.getRank() - 1) {
                                 //suitpile not empty and card is +1
                                 int prio =  4 + buildPileFrom.getRemainingCards() - buildPileFrom.getRevealed().size();
-                                moves.add(new Move(prio, "TOSUITMOVE:\tfrom build " + (i+1) + "\tto suit " + (j+1)));
+                                moves.add(new Move(prio,
+                                        "TOSUITMOVE:\tfrom build " + (i+1) + "\tto suit " + (j+1),
+                                        "s"+(i+1)));
                             }
                         }
                     }
-
-                    //check if "buildpilefrom" can recieve draw-card
-                    Card deckCard = deck.getTopCard();
-                    Card buildPileCard =  buildPileFrom.getTopCard();
-                    if(isMoveLegal(deckCard, buildPileCard)){
-                        moves.add(new Move(1,"DRAWMOVE:\tdraw \tto build " + (i+1) ));
-                    }
+                }
+                //check if "buildpilefrom" can recieve draw-card
+                Card deckCard = deck.getTopCard();
+                Card buildPileCard =  buildPileFrom.getTopCard();
+                if(isMoveLegal(deckCard, buildPileCard)){
+                    moves.add(new Move(1,
+                            "DRAWMOVE:\tdraw \tto build " + (i+1),
+                            "dm"+(i+1)));
+                }
+            }
+            else{
+                //if buildpilefrom is empty, check if draw card is king
+                if(deck.getTopCard().getRank() == 12){
+                    moves.add(new Move(1,
+                            "DRAWMOVE:\tdraw \tto build " + (i+1),
+                            "dm"+(i+1)));
                 }
             }
         }
@@ -292,23 +303,31 @@ public class Gamestate {
             if (deckCard.getSuit() == ((SuitPile)suitPile).getSuit()){
                 if(suitPile.getTopCard() == null && deckCard.getRank() == 0){
                     //suitpile empty and card is and ace
-                    moves.add(new Move(20, "DRAWTOSUIT: \tdraw \tto suit " + (i+1)));
+                    moves.add(new Move(20,
+                            "DRAWTOSUIT: \tdraw \tto suit " + (i+1),
+                            "dms"));
                 }
                 else if(suitPile.getTopCard() != null && suitPile.getTopCard().getRank() == deckCard.getRank() - 1){
                     //suitpile not empty and card is +1
                     if(deckCard.getRank() == 2){
                         //deck card is a deuce
-                        moves.add(new Move(20, "DRAWTOSUIT: \tdraw \tto suit " + (i+1)));
+                        moves.add(new Move(20,
+                                "DRAWTOSUIT: \tdraw \tto suit " + (i+1),
+                                "dms"));
                     }
                     else{
-                        moves.add(new Move(2, "DRAWTOSUIT: \tdraw \tto suit " + (i+1)));
+                        moves.add(new Move(2,
+                                "DRAWTOSUIT: \tdraw \tto suit " + (i+1),
+                                "dms"));
                     }
                 }
             }
         }
 
         //obligatorisk drawcard move
-        moves.add(new Move(0, "Draw card, no other present moves"));
+        moves.add(new Move(0,
+                "Draw card, no other present moves",
+                "d"));
 
         Move prioMove = moves.get(0);
         for(int i = 0; i < moves.size(); i++){
@@ -317,11 +336,29 @@ public class Gamestate {
             }
         }
         System.out.println("prioMove : "+ prioMove.getMovedesc() );
+        System.out.println("prio command: " + prioMove.getCommand());
 
+        return prioMove;
     }
 
     public void updateState(StateDTO newState){
-        // use converToCard method to build from the StringBased newState input
+        // use convertToCard method to build from the StringBased newState input
+        // iterate through
+        ArrayList<String> inputBuildPiles = newState.getBuilds();
+        for(int i = 0; i < 7; i++){
+            Card inCard = convertToCard(inputBuildPiles.get(i));
+            Card currentCard = buildPiles.get(i).getTopCard();
+            //if card is NOT the same, which means there is change
+            if( ! (inCard.getRank() == currentCard.getRank() && inCard.getSuit() == currentCard.getSuit()) ){
+                // Card has either been revealed or moved to this location
+                // move to this location means that it was top card elsewhere
+                // also means maybe multiple cards in same column was moved
+
+
+
+            }
+
+        }
     }
 
     public Card convertToCard(String input){
