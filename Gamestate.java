@@ -1,3 +1,5 @@
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,9 +84,7 @@ public class Gamestate {
             }
         }
     }
-    private int movecheckcount = 0;
     private boolean isMoveLegal(Card from, Card to){
-        movecheckcount++;
         if( ( (to == null) && (from.getRank()==12) ) ||
                 (to!=null  && !to.getColour().equals(from.getColour()) && (to.getRank() == (from.getRank()+1)) ) ){
             return true;
@@ -319,4 +319,42 @@ public class Gamestate {
         System.out.println("prioMove : "+ prioMove.getMovedesc() );
 
     }
+
+    public void updateState(StateDTO newState){
+        // use converToCard method to build from the StringBased newState input
+    }
+
+    public Card convertToCard(String input){
+        // (input format example: H10 for 10-Hearts)
+        // find suit of card at first char
+        char suitChar = input.charAt(0);
+        Suits suit = null;
+        switch (suitChar) {
+            case 'H':
+                suit = Suits.HEARTS;
+                break;
+            case 'S':
+                suit = Suits.SPADES;
+                break;
+            case 'D':
+                suit = Suits.DIAMONDS;
+                break;
+            case 'C':
+                suit = Suits.CLUBS;
+                break;
+            default:
+                System.out.println("Suit Mismatch: Suit not found");
+        }
+
+        //find rank of card:
+        int rank = Integer.parseInt(input.substring(1));
+
+        //create card
+        Card card = new Card(suit, rank);
+        System.out.println("new card = " + card.toString());
+
+        return card;
+    }
+
+
 }

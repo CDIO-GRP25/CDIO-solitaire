@@ -10,8 +10,6 @@ public class Card {
     private String colour;
     private Boolean revealed = false;
 
-
-
     public Card(Suits suit, int rank) {
         this.suit = suit;
         this.rank = rank;
@@ -21,7 +19,6 @@ public class Card {
             this.colour = "red";
         }
     }
-
     public Suits getSuit() {
         return suit;
     }

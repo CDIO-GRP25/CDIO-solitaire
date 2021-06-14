@@ -51,14 +51,4 @@ public class Controller {
         move[1] = Integer.parseInt(splitInput[1])-1;
         return move;
     }
-
-    private void detectMoves(){
-        if(gamestate == null){
-            System.out.println("gamestate missing");
-            return;
-        }
-
-
-
-    }
 }
