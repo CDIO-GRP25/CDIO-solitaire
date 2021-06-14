@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 
 public class StateDTO {
-    ArrayList<String> builds;
-    ArrayList<String> suits;
+    String[] builds;
+    String[] suits;
     String deck;
 
-    public StateDTO(ArrayList<String> builds, ArrayList<String> suits, String deck) {
+    public StateDTO(String[] builds, String[] suits, String deck) {
         this.builds = builds;
         this.suits = suits;
         this.deck = deck;
@@ -13,19 +13,19 @@ public class StateDTO {
     public StateDTO(){
 
     }
-    public ArrayList<String> getBuilds() {
+    public String[] getBuilds() {
         return builds;
     }
 
-    public void setBuilds(ArrayList<String> builds) {
+    public void setBuilds(String[] builds) {
         this.builds = builds;
     }
 
-    public ArrayList<String> getSuits() {
+    public String[] getSuits() {
         return suits;
     }
 
-    public void setSuits(ArrayList<String> suits) {
+    public void setSuits(String[] suits) {
         this.suits = suits;
     }
 

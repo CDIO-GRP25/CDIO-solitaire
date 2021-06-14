@@ -14,6 +14,8 @@ public class Gamestate {
 
     public Gamestate() {
         setupGameState();
+        //mergefix
+        deck.clearDeck();
     }
 
     public void setupGameState() {
@@ -35,7 +37,8 @@ public class Gamestate {
             for (int i = 0; i < buildPiles.indexOf(gamePile) + 1; i++) {
                 gamePile.setupCard(deck.drawCard());
             }
-            gamePile.getTopCard().reveal();
+            //mergefix
+            //gamePile.getTopCard().reveal();
         }
     }
 
@@ -343,22 +346,35 @@ public class Gamestate {
 
     public void updateState(StateDTO newState){
         // use convertToCard method to build from the StringBased newState input
-        // iterate through
-        ArrayList<String> inputBuildPiles = newState.getBuilds();
+        // BUILDPILES
+        // iterate through 0 to 7 and add necessary cards
+        String[] inputBuildPiles = newState.getBuilds();
         for(int i = 0; i < 7; i++){
-            Card inCard = convertToCard(inputBuildPiles.get(i));
+            Card inCard = convertToCard(inputBuildPiles[i]);
             Card currentCard = buildPiles.get(i).getTopCard();
             //if card is NOT the same, which means there is change
-            if( ! (inCard.getRank() == currentCard.getRank() && inCard.getSuit() == currentCard.getSuit()) ){
+            //if( ! (inCard.getRank() == currentCard.getRank() && inCard.getSuit() == currentCard.getSuit()) ){
                 // Card has either been revealed or moved to this location
                 // move to this location means that it was top card elsewhere
                 // also means maybe multiple cards in same column was moved
 
-
-
+            if(currentCard.getRevealed() == false){
+                //hidden topcards have to be replaced!
+                buildPiles.get(i).removeTopCard();
+                buildPiles.get(i).addCard(inCard);
             }
-
+            //}
         }
+
+        // DECK
+        // add card to deck if deck empty or if input card is not the same as it was before :D
+        Card inDeckCard = convertToCard(newState.getDeck());
+        if(deck.getDeckSize() == 0 || !deck.getTopCard().equals(inDeckCard)) {
+            deck.addCard(inDeckCard);
+        }
+
+        //SUITPILES
+        // do they even need anything?
     }
 
     public Card convertToCard(String input){
@@ -388,6 +404,7 @@ public class Gamestate {
 
         //create card
         Card card = new Card(suit, rank);
+        card.reveal();
         System.out.println("new card = " + card.toString());
 
         return card;

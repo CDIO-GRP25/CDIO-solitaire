@@ -1,13 +1,16 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Controller {
     Gamestate gamestate;
     Scanner scanner = new Scanner(System.in);
+    ArrayList<StateDTO> testStates = new ArrayList<>();
 
     public Controller (Gamestate gamestate){
         this.gamestate = gamestate;
+        generateTestStates();
+        gamestate.updateState(testStates.get(0));
     }
-
 
     public void runGame(){
         while(true){
@@ -51,5 +54,10 @@ public class Controller {
         move[0] = Integer.parseInt(splitInput[0])-1;
         move[1] = Integer.parseInt(splitInput[1])-1;
         return move;
+    }
+
+    private void generateTestStates() {
+        //add the states you want to run through
+        testStates.add(new StateDTO(new String[]{"C1", "C2", "C3", "D5", "S12", "C8", "H10"}, new String[]{"C1", "C2", "C2", "C2"}, "C1" ));
     }
 }

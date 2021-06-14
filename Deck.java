@@ -29,7 +29,6 @@ public class Deck {
         Collections.shuffle(this.cards);
     }
 
-
     public Card getTopCard () {
         //used for turning cards over in drawpile
         Card flippedCard = cards.get(drawPileCounter);
@@ -70,5 +69,13 @@ public class Deck {
 
     public int getDrawPileCounter(){
         return drawPileCounter;
+    }
+
+    public void clearDeck(){
+        cards.clear();
+    }
+
+    public void addCard(Card card){
+        cards.add(card);
     }
 }

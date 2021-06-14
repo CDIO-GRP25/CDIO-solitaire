@@ -43,4 +43,11 @@ public class Card {
     public String toString() {
         return rank + "-" + suit;
     }
+
+    public boolean equals(Card otherCard){
+        if(rank == otherCard.getRank() && suit == otherCard.getSuit()){
+            return true;
+        }
+        return false;
+    }
 }

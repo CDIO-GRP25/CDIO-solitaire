@@ -5,6 +5,10 @@
 public class Pile extends GamePile {
 
     void addCard(Card card) {
+        //mergefix
+        //checks ødelægger muligheden for at indsætte vilkårlige kort, som fås fra stateDTO...
+        cardPile.add(card);
+        /*
         if (getRemainingCards() == 0 && card.getRank() == 12) {
             cardPile.add(card);
         }
@@ -18,6 +22,7 @@ public class Pile extends GamePile {
                 System.out.println("Some error message");
             }
         }
+         */
     }
 
 
