@@ -76,7 +76,8 @@ public class Gamestate {
             pileTo.addCards(cardsToMove);
             //reveal card underneath moved pile
             if(pileFrom.getRemainingCards() != 0){
-                pileFrom.getTopCard().reveal();
+                //mergefix
+                //pileFrom.getTopCard().reveal();
             }
         }
     }
@@ -107,7 +108,9 @@ public class Gamestate {
     }
 
     public void drawNextCard(){
-        deck.skipCard();
+        //mergefix (we wont keep track of deck now, we simply remove card and add the new one
+        //deck.skipCard();
+        deck.clearDeck();
     }
 
     public void addCardToSuitPile(int from){
@@ -137,7 +140,8 @@ public class Gamestate {
                         pileFrom.removeCards(cardRemover);
                         System.out.println(cardToMove.toString() + " removed from pile");
                         if(pileFrom.getRemainingCards() != 0){
-                            pileFrom.getTopCard().reveal();
+                            //mergefix
+                            //pileFrom.getTopCard().reveal();
                         }
                     }
                 }
@@ -350,15 +354,11 @@ public class Gamestate {
         // iterate through 0 to 7 and add necessary cards
         String[] inputBuildPiles = newState.getBuilds();
         for(int i = 0; i < 7; i++){
-            Card inCard = convertToCard(inputBuildPiles[i]);
-            Card currentCard = buildPiles.get(i).getTopCard();
-            //if card is NOT the same, which means there is change
-            //if( ! (inCard.getRank() == currentCard.getRank() && inCard.getSuit() == currentCard.getSuit()) ){
-                // Card has either been revealed or moved to this location
-                // move to this location means that it was top card elsewhere
-                // also means maybe multiple cards in same column was moved
 
-            if(currentCard.getRevealed() == false){
+            Card currentCard = buildPiles.get(i).getTopCard();
+            //if topcard is hidden
+            if(currentCard != null && currentCard.getRevealed() == false){
+                Card inCard = convertToCard(inputBuildPiles[i]);
                 //hidden topcards have to be replaced!
                 buildPiles.get(i).removeTopCard();
                 buildPiles.get(i).addCard(inCard);

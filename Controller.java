@@ -5,15 +5,17 @@ public class Controller {
     Gamestate gamestate;
     Scanner scanner = new Scanner(System.in);
     ArrayList<StateDTO> testStates = new ArrayList<>();
+    int testStateCounter = 0;
 
     public Controller (Gamestate gamestate){
         this.gamestate = gamestate;
+        //mergefix
         generateTestStates();
-        gamestate.updateState(testStates.get(0));
     }
 
     public void runGame(){
         while(true){
+            gamestate.updateState(testStates.get(testStateCounter++));
             gamestate.print();
             Move bestMove = gamestate.detectMoves();
             scanner.nextLine();
@@ -58,6 +60,22 @@ public class Controller {
 
     private void generateTestStates() {
         //add the states you want to run through
-        testStates.add(new StateDTO(new String[]{"C1", "C2", "C3", "D5", "S12", "C8", "H10"}, new String[]{"C1", "C2", "C2", "C2"}, "C1" ));
+        testStates.add(new StateDTO(new String[]{"C2", "D10", "C4", "D5", "S12", "H8", "H10"}, new String[]{"", "", "", ""}, "C1" ));
+        // basicmove 3,4
+        testStates.add(new StateDTO(new String[]{"C2", "D10", "C0", "C4", "S12", "H8", "H10"}, new String[]{"", "", "", ""}, "C1" ));
+        //tosuitmove s3
+        testStates.add(new StateDTO(new String[]{"C2", "D10", "D12", "C4", "S12", "H8", "H10"}, new String[]{"", "", "", "C0"}, "C1" ));
+        //drawtosuit dms
+        testStates.add(new StateDTO(new String[]{"C2", "D10", "D12", "C4", "S12", "H8", "H10"}, new String[]{"", "", "", "C1"}, "C12" ));
+        //tosuitmove s1 (to free 1st collumn for king)
+        testStates.add(new StateDTO(new String[]{"", "D10", "D12", "C4", "S12", "H8", "H10"}, new String[]{"", "", "", "C2"}, "C12" ));
+        //kingmove 5,1
+        testStates.add(new StateDTO(new String[]{"S12", "D10", "D12", "C4", "H9", "H8", "H10"}, new String[]{"", "", "", "C2"}, "C12" ));
+        //drawcard d
+        testStates.add(new StateDTO(new String[]{"S12", "D10", "D12", "C4", "H9", "H8", "H10"}, new String[]{"", "", "", "C2"}, "H11" ));
+        //drawtobuild dm1
+        testStates.add(new StateDTO(new String[]{"H11", "D10", "D12", "C4", "H9", "H8", "H10"}, new String[]{"", "", "", "C2"}, "H4" ));
+        //drawcard d
+        testStates.add(new StateDTO(new String[]{"H11", "D10", "D12", "C4", "H9", "H8", "H10"}, new String[]{"", "", "", "C2"}, "S9" ));
     }
 }
