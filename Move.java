@@ -1,3 +1,5 @@
+package com.example.cdio.logic;
+
 public class Move {
     private int priority;
     private String movedesc;

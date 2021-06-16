@@ -1,3 +1,5 @@
+package com.example.cdio.logic;
+
 class main {
     public static void main(String[] args) {
         Gamestate game = new Gamestate();

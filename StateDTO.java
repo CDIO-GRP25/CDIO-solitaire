@@ -1,3 +1,5 @@
+package com.example.cdio.logic;
+
 import java.util.ArrayList;
 
 public class StateDTO {

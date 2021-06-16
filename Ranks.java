@@ -1,3 +1,5 @@
+package com.example.cdio.logic;
+
 public enum Ranks {
     Ace,
     Two,
