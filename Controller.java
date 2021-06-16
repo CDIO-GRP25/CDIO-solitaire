@@ -52,6 +52,7 @@ public class Controller {
     public Move updateGame(StateDTO stateDTO){
         gamestate.updateState(stateDTO);
         Move prioMove = gamestate.detectMoves();
+        gamestate.print();
         executeCommand(prioMove.getCommand());
         return prioMove;
     }
