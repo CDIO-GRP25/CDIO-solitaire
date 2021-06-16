@@ -49,6 +49,40 @@ public class Controller {
         }
     }
 
+    public Move updateGame(StateDTO stateDTO){
+        gamestate.updateState(stateDTO);
+        Move prioMove = gamestate.detectMoves();
+        executeCommand(prioMove.getCommand());
+        return prioMove;
+    }
+
+    private void executeCommand(String input){
+        if(input.isEmpty()){
+            System.out.println("no input...");
+        }
+        //checking input action
+        else if(input.charAt(0) == 'd' && input.length() == 1) {
+            gamestate.drawNextCard();
+        }
+        else if(input.equals("dms")){
+            gamestate.drawToSuitPile();
+        }
+        else if(input.length() == 3 && input.substring(0,2).equals("dm") ){
+            //move flipped card from draw pile to build pile
+            gamestate.moveDrawPileCard(Integer.parseInt(input.substring(2)) - 1);
+        }
+        else if(input.charAt(0) == 'm' && input.length()==4 && input.charAt(2) == ','){
+            int[] move = extractMoveInput(input);
+            gamestate.moveCardToPile(move);
+        }
+        else if(input.length() == 2 && input.substring(0,1).equals("s")){
+            gamestate.addCardToSuitPile(Integer.parseInt(input.substring(1)) - 1);
+        }
+        else {
+            System.out.println("input ikke gyldigt");
+        }
+    }
+
     private int[] extractMoveInput(String input){
         //System.out.println("input string: " + input);
         //System.out.println("input substring: " + input.substring(1));
